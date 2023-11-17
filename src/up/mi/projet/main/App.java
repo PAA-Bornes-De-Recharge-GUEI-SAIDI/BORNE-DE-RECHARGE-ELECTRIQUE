@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import up.mi.projet.main.agglomeration.Road;
 import up.mi.projet.main.agglomeration.Town;
 
 public class App {
@@ -24,13 +25,83 @@ public class App {
       // show the list of towns
       System.out.println("Liste des villes : " + Town.getTowns());
 
-      // create menu
-      System.out.println("1 - Ajouter une route");
-      System.out.println("2 - fin");
+      while (true) {
+        // create menu
+        System.out.println("1 - Ajouter une route");
+        System.out.println("2 - fin");
+        System.out.print("Votre choix : ");
+        String choice = reader.readLine();
+
+        // end condition
+        if (choice.equals("2")) {
+          break;
+        }
+
+        if (choice.equals("1")) {
+          addRoad(reader);
+          // show the list of roads
+          System.out.println("Liste des routes : " + Road.getRoads());
+        }
+      }
+
+      while (true) {
+        System.out.println("1 - Ajouter une zone de recharge");
+        System.out.println("2 - Retirer une zone de recharge");
+        System.out.println("3 - fin");
+        System.out.print("Votre choix : ");
+        String choice = reader.readLine();
+
+        // end condition
+        if (choice.equals("3")) {
+          break;
+        } else if (choice.equals("1")) {
+          addStation(reader);
+          System.out.println(Town.getTownsByStation());
+        } else if (choice.equals("2")) {
+          removeStation(reader);
+          System.out.println(Town.getTownsByStation());
+        }
+      }
 
     } catch (Exception e) {
       e.printStackTrace(System.err);
     }
 
+  }
+
+  public static void addStation(BufferedReader reader) throws IOException {
+    System.out.println("Liste des villes : " + Town.getTowns());
+    System.out.print("Quelle ville : ");
+
+    Town town = Town.getTownByName(reader.readLine());
+
+    town.addStation();
+  }
+
+  public static void removeStation(BufferedReader reader) throws IOException {
+    System.out.println("Liste des villes : " + Town.getTowns());
+    System.out.print("Quelle ville : ");
+
+    Town town = Town.getTownByName(reader.readLine());
+
+    // check if the town has a station or if it is link to another town with a
+    // station thanks to a road
+    for (Road road : Road.getRoads()) {
+      // TODO
+    }
+
+    town.removeStation();
+  }
+
+  public static void addRoad(BufferedReader reader) throws IOException {
+    System.out.println("Liste des villes : " + Town.getTowns());
+
+    System.out.print("Quelle ville de départ : ");
+    String origin = reader.readLine();
+
+    System.out.print("Quelle ville d'arrivée : ");
+    String destination = reader.readLine();
+
+    Road.addRoad(new Road(Town.getTownByName(origin), Town.getTownByName(destination)));
   }
 }
