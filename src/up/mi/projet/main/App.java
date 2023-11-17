@@ -86,11 +86,23 @@ public class App {
 
     // check if the town has a station or if it is link to another town with a
     // station thanks to a road
-    for (Road road : Road.getRoads()) {
-      // TODO
+    boolean aUneStationProche=true;
+    StringBuffer sb = new StringBuffer();
+    
+    if(town.getStation()==null) {
+    	for (Road road : Road.getRoads()) {
+    		if(road.getOrigin().getStation()==null&&road.getDestination().getStation()==null){
+    			aUneStationProche=false;
+    			sb.append(road.getOrigin().getName()+" "+road.getDestination().getName()+" ");
+    		}
+        }
     }
-
-    town.removeStation();
+    if(aUneStationProche){
+    	town.removeStation();
+    }else {
+    	System.out.println("Supprimer la station va à l'encontre de la régle d'accéssibilité avec : "+sb);
+    }
+    
   }
 
   public static void addRoad(BufferedReader reader) throws IOException {
